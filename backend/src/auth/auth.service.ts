@@ -12,6 +12,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  private async generateToken(user:User){
+    const payload = {id: user.id, email: user.email, role: user.roles}
+    return {
+        token: this.jwtService.sign(payload)
+    }
+}
+
   async login(userDto: CreateUserDto) {
     const user = await this.validateUser(userDto)
     return this.generateToken(user)
@@ -32,14 +39,9 @@ export class AuthService {
 
     return this.generateToken(user);
   }
-  async generateToken(user:User){
-      const payload = {email: user.email, id: user.id, role: user.roles}
-      return {
-          token: this.jwtService.sign(payload)
-      }
-  }
+ 
 
-  async validateUser(userDto: CreateUserDto){
+  private async validateUser(userDto: CreateUserDto){
       const user = await this.userService.getUserByEmail(userDto.email)
       const passwordEquals = await bcrypt.compare(userDto.password, user.password)
       if(user && passwordEquals){
