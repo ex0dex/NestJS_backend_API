@@ -52,10 +52,10 @@ export class User extends Model<User, UserCreationAttribute> {
     description: 'ban reason',
   })
   @Column({
-    type: DataType.BOOLEAN,
+    type: DataType.STRING, 
     allowNull: true,
   })
-  banReason: string;
+  banReason: string; 
 
   @BelongsToMany(() => Role, () => UserRoles)
   roles: Role[];
